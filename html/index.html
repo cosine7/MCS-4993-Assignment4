@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form id="form" action="">
+        <label for="input">
+            Name:
+            <input id="input" autocomplete="off" />
+        </label>
+        <button>Submit</button>
+    </form>
+    <ul id="autocompleteList"></ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const autocompleteList = document.getElementById('autocompleteList');
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+
+        const removeAllChildren = () => {
+            while (autocompleteList.firstChild) {
+                autocompleteList.removeChild(autocompleteList.firstChild);
+            }
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('submit', input.value);
+                input.value = '';
+            }
+        });
+
+        input.addEventListener('keyup', function() {
+            if (input.value) {
+                socket.emit('keyup', input.value);
+            } else {
+                removeAllChildren();
+            }
+        });
+
+        socket.on('autocomplete', (names) => {
+            removeAllChildren();
+            for (let i = 0; i < names.length; ++i) {
+                const item = document.createElement('li');
+                item.textContent = names[i].name;
+                autocompleteList.appendChild(item);
+            }
+        });
+    </script>
+</body>
+</html>
