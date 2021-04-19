@@ -6,11 +6,10 @@ const http = require('http');
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 const mongoose = require('mongoose');
-const router = require('./routes/route');
 const UserService = require('./services/user.service');
 require('dotenv').config();
 
-app.use(router);
+app.use(express.static(`${__dirname}/public`));
 
 io.on('connection', (socket) => {
   socket.on('submit', async (value) => {
@@ -28,7 +27,5 @@ io.on('connection', (socket) => {
     useFindAndModify: false,
     useCreateIndex: true,
   });
-  server.listen(3000, () => {
-    console.log('listening on *:3000');
-  });
+  server.listen(8080);
 })();
