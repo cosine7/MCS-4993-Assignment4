@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-module.exports = Mongoose.model('Product', new Mongoose.Schema({
+module.exports = Mongoose.model('User', new Mongoose.Schema({
   name: { type: String, required: true },
 }, {
   toJSON: {
