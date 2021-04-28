@@ -34,6 +34,7 @@
             if (input.value) {
                 socket.emit('submit', input.value);
                 input.value = '';
+                removeAllChildren();
             }
         });
 
